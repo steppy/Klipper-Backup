@@ -32,10 +32,12 @@ git_protocol=${git_protocol:-"https"}
 git_host=${git_host:-"github.com"}
 ssh_user=${ssh_user:-"git"}
 
-if [[ $git_protocol == "ssh" ]]; then
-    full_git_url=$git_protocol"://"$ssh_user"@"$git_host"/"$github_username"/"$github_repository".git"
+if [[ -n "$custom_git_url" ]]; then
+  full_git_url="$custom_git_url"
+elif [[ $git_protocol == "ssh" ]]; then
+  full_git_url="${ssh_user}@${git_host}:${github_username}/${github_repository}.git"
 else
-    full_git_url=$git_protocol"://"$git_host"/"$github_username"/"$github_repository".git"
+  full_git_url="${git_protocol}://${github_token}@${git_host}/${github_username}/${github_repository}.git"
 fi
 export KB_GITHUB_TOKEN="$github_token"
 exclude=${exclude:-"*.swp" "*.tmp" "printer-[0-9]*_[0-9]*.cfg" "*.bak" "*.bkp" "*.csv" "*.zip"}
